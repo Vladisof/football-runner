@@ -1,0 +1,108 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5397c64509ab92a4b9e8309aebcb66e1, type: 3}
+  m_Name: themeData
+  m_EditorClassIdentifier: 
+  themeName: Night (Hard)
+  cost: 10000
+  premiumCost: 50
+  themeIcon: {fileID: 21300000, guid: b441b4b04fad160488916eb844b31b0a, type: 3}
+  zones:
+  - length: 500
+    prefabList:
+    - m_AssetGUID: 0be3994764643a140a1f76632bfb260d
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    - m_AssetGUID: da77169f03996f54c963bb49e34181ce
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    - m_AssetGUID: 69b188c21172e90408823db284c22b9c
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    - m_AssetGUID: 524f645c1c7124d41ba639acee75c0aa
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    - m_AssetGUID: 6c5a35b8e55745f46a136f8d75267fca
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    - m_AssetGUID: 54b7a5ae4dc435f43b1849abcb4f072d
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    - m_AssetGUID: 893e03a4607b86a488de93068d6d8729
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    - m_AssetGUID: c3c2b060ab2d57041bcd8943af5388f8
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    - m_AssetGUID: 13e23de36306d294e86acd6e0d42a24a
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    - m_AssetGUID: 705aa7eed09853841b380ce1d5accc16
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    - m_AssetGUID: 705aa7eed09853841b380ce1d5accc16
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    - m_AssetGUID: a4ac3fc9992acb54eade595de442b7ff
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    - m_AssetGUID: 3c01204f75c82bc4bbd868ca40eaee9a
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    - m_AssetGUID: 1c903ebedaa39a243bedf548bcff8c26
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+  - length: 500
+    prefabList:
+    - m_AssetGUID: 11a7ead111685f14e80c6724618f51c4
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    - m_AssetGUID: 6bb2de910de86da45910b99a48b7a033
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    - m_AssetGUID: b942607f4400a0e4d8b5ce01456ae183
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    - m_AssetGUID: c3df6f12b4a4bbe4e9a57b52fc9cb087
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+  collectiblePrefab: {fileID: 184264, guid: 16cac8b68c4ca6448baecd0680e025f6, type: 3}
+  premiumCollectible: {fileID: 1000010457517272, guid: ac3c86c2382618643bfda6ab3cc81a0b,
+    type: 3}
+  cloudPrefabs:
+  - {fileID: 1000012225143368, guid: f788e812c45a0754a9e0342be76a1750, type: 3}
+  - {fileID: 1000012941456988, guid: 07a627dbf273e1d45bcb01af87c57cbb, type: 3}
+  - {fileID: 1000013540275922, guid: 8dc97c4ee68c61247bc0dcfb3fa8237e, type: 3}
+  cloudMinimumDistance: {x: 0, y: 10, z: 10}
+  cloudSpread: {x: 20, y: 1, z: 20}
+  cloudNumber: 20
+  skyMesh: {fileID: 4300000, guid: fc2e45f7433c13741aaad00729ca807f, type: 3}
+  UIGroundMesh: {fileID: 4300000, guid: 5a3ee9746dc25cb4f8d2e3a1a7382eab, type: 3}
+  fogColor: {r: 0.13559689, g: 0.27861834, b: 0.5588235, a: 1}
