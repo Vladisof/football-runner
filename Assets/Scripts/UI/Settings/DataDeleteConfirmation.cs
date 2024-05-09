@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using GameManager;
+using UnityEngine;
 
 public class DataDeleteConfirmation : MonoBehaviour
 {

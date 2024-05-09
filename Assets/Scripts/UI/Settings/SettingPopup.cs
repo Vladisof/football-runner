@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using GameManager;
+using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
 

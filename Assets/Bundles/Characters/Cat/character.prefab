@@ -104,9 +104,9 @@ MonoBehaviour:
   - {fileID: 391940814743980701}
   animator: {fileID: 9501716}
   icon: {fileID: 21300000, guid: c7ddc477727c43847a68cd35b9bc8cc1, type: 3}
-  jumpSound: {fileID: 8300000, guid: 819da6b208e0c0342b38dbbba363b740, type: 3}
-  hitSound: {fileID: 8300000, guid: 4df05e5a3da67b74ab57e4fdbff8c1fa, type: 3}
-  deathSound: {fileID: 8300000, guid: 3acd66c1c1f3d3a499214949f2b98bc5, type: 3}
+  jumpSound: {fileID: 8300000, guid: 304a140fe5f32da41bafb954e8311e5e, type: 3}
+  hitSound: {fileID: 8300000, guid: 54cc829215ccca04388614b787f05191, type: 3}
+  deathSound: {fileID: 8300000, guid: 54cc829215ccca04388614b787f05191, type: 3}
 --- !u!82 &82000013563701790
 AudioSource:
   m_ObjectHideFlags: 0

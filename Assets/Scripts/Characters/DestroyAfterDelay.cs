@@ -1,18 +1,18 @@
 using UnityEngine;
-
-public class DestroyAfterDelay : MonoBehaviour
+namespace Characters
 {
-  public float delay = 15f; // Задержка перед уничтожением в секундах
-
-  void Start()
+  public class DestroyAfterDelay : MonoBehaviour
   {
-    // Вызываем метод DestroyObject с задержкой
-    Invoke("DestroyObject", delay);
-  }
+    public float delay = 15f;
 
-  void DestroyObject()
-  {
-    // Уничтожаем текущий объект
-    Destroy(gameObject);
+    void Start()
+    {
+      Invoke("DestroyObject", delay);
+    }
+
+    void DestroyObject()
+    {
+      Destroy(gameObject);
+    }
   }
 }

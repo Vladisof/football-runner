@@ -1,9 +1,10 @@
-﻿using UnityEngine;
+﻿using Consumable;
+using UnityEngine;
 
 
 public class ShopItemList : ShopList
 {
-	static public Consumable.ConsumableType[] s_ConsumablesTypes = System.Enum.GetValues(typeof(Consumable.ConsumableType)) as Consumable.ConsumableType[];
+	static public Consumable.Consumables.ConsumableType[] s_ConsumablesTypes = System.Enum.GetValues(typeof(Consumable.Consumables.ConsumableType)) as Consumable.Consumables.ConsumableType[];
 
 	public override void Populate()
     {
@@ -15,7 +16,7 @@ public class ShopItemList : ShopList
 
         for(int i = 0; i < s_ConsumablesTypes.Length; ++i)
         {
-            Consumable c = ConsumableDatabase.GetConsumbale(s_ConsumablesTypes[i]);
+            Consumable.Consumables c = ConsumablesDatabase.GetConsumbale(s_ConsumablesTypes[i]);
             if(c != null)
             {
                 prefabItem.InstantiateAsync().Completed += (op) =>
@@ -57,7 +58,7 @@ public class ShopItemList : ShopList
         }
     }
 
-	protected void RefreshButton(ShopItemListItem itemList, Consumable c)
+	protected void RefreshButton(ShopItemListItem itemList, Consumable.Consumables c)
 	{
 		int count = 0;
 		PlayerData.instance.consumables.TryGetValue(c.GetConsumableType(), out count);
@@ -74,7 +75,7 @@ public class ShopItemList : ShopList
 		}
 	}
 
-    public void Buy(Consumable c)
+    public void Buy(Consumable.Consumables c)
     {
         PlayerData.instance.coins -= c.GetPrice();
 		PlayerData.instance.premium -= c.GetPremiumCost();

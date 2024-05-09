@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Characters;
+using Consumable;
 using UnityEditor;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Analytics;
 using UnityEngine.ResourceManagement;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.Serialization;
 using GameObject = UnityEngine.GameObject;
 
 #if UNITY_ANALYTICS
@@ -38,8 +41,8 @@ public class TrackManager : MonoBehaviour
   public delegate int MultiplierModifier (int current);
   public MultiplierModifier modifyMultiply;
 
-  [Header("Character & Movements")]
-  public CharacterInputController characterController;
+  [FormerlySerializedAs("characterController"),Header("Character & Movements")]
+  public CharactersInputController CharactersController;
   public float minSpeed = 5.0f;
   public float maxSpeed = 10.0f;
   public int speedStep = 4;
@@ -48,8 +51,8 @@ public class TrackManager : MonoBehaviour
 
   public bool invincible = false;
 
-  [Header("Objects")]
-  public ConsumableDatabase consumableDatabase;
+  [FormerlySerializedAs("consumableDatabase"),Header("Objects")]
+  public ConsumablesDatabase ConsumablesDatabase;
   public MeshFilter skyMeshFilter;
 
   [Header("Parallax")]
@@ -140,7 +143,7 @@ public class TrackManager : MonoBehaviour
 
   public void StartMove (bool isRestart = true)
   {
-    characterController.StartMoving();
+    CharactersController.StartMoving();
     m_IsMoving = true;
 
     if (isRestart)
@@ -154,7 +157,7 @@ public class TrackManager : MonoBehaviour
 
   IEnumerator WaitToStart()
   {
-    characterController.character.animator.Play(s_StartHash);
+    CharactersController.Characters.animator.Play(s_StartHash);
     float length = k_CountdownToStartLength;
     m_TimeToStart = length;
 
@@ -169,10 +172,10 @@ public class TrackManager : MonoBehaviour
     if (m_Rerun)
     {
       // Make invincible on rerun, to avoid problems if the character died in front of an obstacle
-      characterController.characterCollider.SetInvincible();
+      CharactersController.CharactersCollider.SetInvincible();
     }
 
-    characterController.StartRunning();
+    CharactersController.StartRunning();
     StartMove();
   }
 
@@ -182,6 +185,7 @@ public class TrackManager : MonoBehaviour
     {
       firstObstacle = true;
       m_CameraOriginalPos = Camera.main.transform.position;
+      Camera.main.fieldOfView = 77.0f;
 
       if (m_TrackSeed != -1)
         Random.InitState(m_TrackSeed);
@@ -191,7 +195,7 @@ public class TrackManager : MonoBehaviour
       m_CurrentSegmentDistance = k_StartingSegmentDistance;
       m_TotalWorldDistance = 0.0f;
 
-      characterController.gameObject.SetActive(true);
+      CharactersController.gameObject.SetActive(true);
 
       var op = Addressables.InstantiateAsync(PlayerData.instance.characters[PlayerData.instance.usedCharacter], Vector3.zero, Quaternion.identity);
       yield return op;
@@ -202,18 +206,18 @@ public class TrackManager : MonoBehaviour
         yield break;
       }
 
-      Character player = op.Result.GetComponent<Character>();
+      Characters.Characters player = op.Result.GetComponent<Characters.Characters>();
 
-      player.SetupAccesory(PlayerData.instance.usedAccessory);
+      player.SetupAccessor(PlayerData.instance.usedAccessory);
 
-      characterController.character = player;
-      characterController.trackManager = this;
+      CharactersController.Characters = player;
+      CharactersController.trackManager = this;
 
-      characterController.Init();
-      characterController.CheatInvincible(invincible);
+      CharactersController.Init();
+      CharactersController.CheatInvincible(invincible);
 
-      player.transform.SetParent(characterController.characterCollider.transform, false);
-      Camera.main.transform.SetParent(characterController.transform, true);
+      player.transform.SetParent(CharactersController.CharactersCollider.transform, false);
+      Camera.main.transform.SetParent(CharactersController.transform, true);
 
       if (m_IsTutorial)
         m_CurrentThemeData = tutorialThemeData;
@@ -228,9 +232,9 @@ public class TrackManager : MonoBehaviour
       RenderSettings.fog = true;
 
       gameObject.SetActive(true);
-      characterController.gameObject.SetActive(true);
-      characterController.coins = 0;
-      characterController.premium = 0;
+      CharactersController.gameObject.SetActive(true);
+      CharactersController.coins = 0;
+      CharactersController.premium = 0;
 
       m_Score = 0;
       m_ScoreAccum = 0;
@@ -242,7 +246,7 @@ public class TrackManager : MonoBehaviour
       PlayerData.instance.StartRunMissions(this);
     }
 
-    characterController.Begin();
+    CharactersController.Begin();
     StartCoroutine(WaitToStart());
     isLoaded = true;
   }
@@ -263,16 +267,16 @@ public class TrackManager : MonoBehaviour
     m_Segments.Clear();
     m_PastSegments.Clear();
 
-    characterController.End();
+    CharactersController.End();
 
     gameObject.SetActive(false);
-    Addressables.ReleaseInstance(characterController.character.gameObject);
-    characterController.character = null;
+    Addressables.ReleaseInstance(CharactersController.Characters.gameObject);
+    CharactersController.Characters = null;
 
     Camera.main.transform.SetParent(null);
     Camera.main.transform.position = m_CameraOriginalPos;
 
-    characterController.gameObject.SetActive(false);
+    CharactersController.gameObject.SetActive(false);
 
     for (int i = 0; i < parallaxRoot.childCount; ++i)
     {
@@ -281,10 +285,10 @@ public class TrackManager : MonoBehaviour
     }
 
     //if our consumable wasn't used, we put it back in our inventory
-    if (characterController.inventory != null)
+    if (CharactersController.inventory != null)
     {
-      PlayerData.instance.Add(characterController.inventory.GetConsumableType());
-      characterController.inventory = null;
+      PlayerData.instance.Add(CharactersController.inventory.GetConsumableType());
+      CharactersController.inventory = null;
     }
   }
 
@@ -361,7 +365,7 @@ public class TrackManager : MonoBehaviour
 
     Vector3 currentPos;
     Quaternion currentRot;
-    Transform characterTransform = characterController.transform;
+    Transform characterTransform = CharactersController.transform;
 
     m_Segments[0].GetPointAtInWorldUnit(m_CurrentSegmentDistance, out currentPos, out currentRot);
 
@@ -454,7 +458,7 @@ public class TrackManager : MonoBehaviour
       }
     }
 
-    characterController.coinMultiplier = m_Multiplier;
+    CharactersController.coinMultiplier = m_Multiplier;
 
     if (!m_IsTutorial)
     {
@@ -632,20 +636,20 @@ public class TrackManager : MonoBehaviour
 
           if (Random.value < powerupChance)
           {
-            int picked = Random.Range(0, consumableDatabase.consumbales.Length);
+            int picked = Random.Range(0, ConsumablesDatabase.consumables.Length);
 
             //if the powerup can't be spawned, we don't reset the time since powerup to continue to have a high chance of picking one next track segment
-            if (consumableDatabase.consumbales[picked].canBeSpawned)
+            if (ConsumablesDatabase.consumables[picked].canBeSpawned)
             {
               m_TimeSincePowerup = 0.0f;
               powerupChance = 0.0f;
 
-              AsyncOperationHandle op = Addressables.InstantiateAsync(consumableDatabase.consumbales[picked].gameObject.name, pos, rot);
+              AsyncOperationHandle op = Addressables.InstantiateAsync(ConsumablesDatabase.consumables[picked].gameObject.name, pos, rot);
               yield return op;
 
               if (op.Result == null || !(op.Result is GameObject))
               {
-                Debug.LogWarning(string.Format("Unable to load consumable {0}.", consumableDatabase.consumbales[picked].gameObject.name));
+                Debug.LogWarning(string.Format("Unable to load consumable {0}.", ConsumablesDatabase.consumables[picked].gameObject.name));
                 yield break;
               }
 

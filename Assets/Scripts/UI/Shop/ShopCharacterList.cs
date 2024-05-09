@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using Characters;
 using TMPro;
 using UnityEngine.AddressableAssets;
 
@@ -17,9 +18,9 @@ public class ShopCharacterList : ShopList
             Destroy(t.gameObject);
         }
 
-        foreach(KeyValuePair<string, Character> pair in CharacterDatabase.dictionary)
+        foreach(KeyValuePair<string, Characters.Characters> pair in CharactersDatabase.dictionary)
         {
-            Character c = pair.Value;
+            Characters.Characters c = pair.Value;
             if (c != null)
             {
                 prefabItem.InstantiateAsync().Completed += (op) =>
@@ -59,7 +60,7 @@ public class ShopCharacterList : ShopList
         }
     }
 
-	protected void RefreshButton(ShopItemListItem itm, Character c)
+	protected void RefreshButton(ShopItemListItem itm, Characters.Characters c)
 	{
 		if (c.cost > PlayerData.instance.coins)
 		{
@@ -81,7 +82,7 @@ public class ShopCharacterList : ShopList
 
 
 
-	public void Buy(Character c)
+	public void Buy(Characters.Characters c)
     {
         PlayerData.instance.coins -= c.cost;
 		PlayerData.instance.premium -= c.premiumCost;

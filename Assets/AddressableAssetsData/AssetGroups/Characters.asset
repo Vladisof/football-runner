@@ -64,11 +64,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a308977efd2ad9f468d4f694df511675
-    m_Address: Assets/Sounds/SFX/GarbageBag.wav
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1cc33752afe4fe340825041c76b0d542
     m_Address: ObstacleGarbageBag
     m_ReadOnly: 0
@@ -86,6 +81,51 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5df552a5ecb6cba4dbc0a49aec054c6e
     m_Address: ShieldDestroyedVFX
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4dce516fa60aa454f8e574759e59ec06
+    m_Address: Assets/Tutorial/LeftRight/Platform A 2.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7c754ceb589614340b38905a9289662d
+    m_Address: Assets/Tutorial/LeftRight/Platform A 1.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0a2fc783146e7b44d9c8e31ce2e15d0f
+    m_Address: Assets/Tutorial/LeftRight/Platform A.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 081506946333d2b4bb0b884dfa19babd
+    m_Address: Assets/Tutorial/Down/Platform B.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 97aa116eabe5d534986b8d65945f1a05
+    m_Address: Assets/Tutorial/Down/Platform B 2.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 204b79fecd3fe5046b541c1aceb4a1d7
+    m_Address: Assets/Tutorial/Down/Platform B 1.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4e71ad27553581948b4a1fe44c054fad
+    m_Address: Assets/Tutorial/Up/Platform C 2 3.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4a79019f685797d4bae39146ac0e6e2b
+    m_Address: Assets/Tutorial/Up/Platform C 2 1.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ce5d87877cd67c5499b937f5e9d75289
+    m_Address: Assets/Tutorial/Up/Platform C 2 2.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

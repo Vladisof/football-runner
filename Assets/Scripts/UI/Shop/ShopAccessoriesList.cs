@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using Characters;
 using TMPro;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -12,7 +13,7 @@ public class ShopAccessoriesList : ShopList
 {
     public AssetReference headerPrefab;
 
-    List<Character> m_CharacterList = new List<Character>();
+    List<Characters.Characters> m_CharacterList = new List<Characters.Characters>();
 
     //엑세서리 상점 UI는 다음과 같이 구현되어 있음.
     //
@@ -44,9 +45,9 @@ public class ShopAccessoriesList : ShopList
         }
 
         m_CharacterList.Clear();
-        foreach (KeyValuePair<string, Character> pair in CharacterDatabase.dictionary)
+        foreach (KeyValuePair<string, Characters.Characters> pair in CharactersDatabase.dictionary)
         {
-            Character c = pair.Value;
+            Characters.Characters c = pair.Value;
 
             if (c.accessories !=null && c.accessories.Length > 0)
                 m_CharacterList.Add(c);
@@ -66,7 +67,7 @@ public class ShopAccessoriesList : ShopList
         }
         else
         {
-            Character c = m_CharacterList[currentIndex];
+            Characters.Characters c = m_CharacterList[currentIndex];
 
             GameObject header = op.Result;
             header.transform.SetParent(listRoot, false);
@@ -85,31 +86,31 @@ public class ShopAccessoriesList : ShopList
     //재귀 함수
     void LoadedAccessory(AsyncOperationHandle<GameObject> op, int characterIndex, int accessoryIndex)
     {
-	    Character c = m_CharacterList[characterIndex];
+	    Characters.Characters c = m_CharacterList[characterIndex];
 	    if (op.Result == null || !(op.Result is GameObject))
 	    {
 		    Debug.LogWarning(string.Format("Unable to load shop accessory list {0}.", prefabItem.Asset.name));
 	    }
 	    else
 	    {
-		    CharacterAccessories accessory = c.accessories[accessoryIndex];
+		    CharacterAccessor accessor = c.accessories[accessoryIndex];
 
 		    GameObject newEntry = op.Result;
 		    newEntry.transform.SetParent(listRoot, false);
 
 		    ShopItemListItem itm = newEntry.GetComponent<ShopItemListItem>();
 
-		    string compoundName = c.characterName + ":" + accessory.accessoryName;
+		    string compoundName = c.characterName + ":" + accessor.accessoryName;
 
-		    itm.nameText.text = accessory.accessoryName;
-		    itm.pricetext.text = accessory.cost.ToString();
-		    itm.icon.sprite = accessory.accessoryIcon;
+		    itm.nameText.text = accessor.accessoryName;
+		    itm.pricetext.text = accessor.cost.ToString();
+		    itm.icon.sprite = accessor.accessoryIcon;
 		    itm.buyButton.image.sprite = itm.buyButtonSprite;
 
-		    if (accessory.premiumCost > 0)
+		    if (accessor.premiumCost > 0)
 		    {
 			    itm.premiumText.transform.parent.gameObject.SetActive(true);
-			    itm.premiumText.text = accessory.premiumCost.ToString();
+			    itm.premiumText.text = accessor.premiumCost.ToString();
 		    }
 		    else
 		    {
@@ -118,11 +119,11 @@ public class ShopAccessoriesList : ShopList
 
 		    itm.buyButton.onClick.AddListener(delegate()
 		    {
-			    Buy(compoundName, accessory.cost, accessory.premiumCost);
+			    Buy(compoundName, accessor.cost, accessor.premiumCost);
 		    });
 
-		    m_RefreshCallback += delegate() { RefreshButton(itm, accessory, compoundName); };
-		    RefreshButton(itm, accessory, compoundName);
+		    m_RefreshCallback += delegate() { RefreshButton(itm, accessor, compoundName); };
+		    RefreshButton(itm, accessor, compoundName);
 	    }
 
 	    accessoryIndex++;
@@ -149,15 +150,15 @@ public class ShopAccessoriesList : ShopList
 	    }
     }
 
-	protected void RefreshButton(ShopItemListItem itm, CharacterAccessories accessory, string compoundName)
+	protected void RefreshButton(ShopItemListItem itm, CharacterAccessor accessor, string compoundName)
 	{
-		if (accessory.cost > PlayerData.instance.coins)
+		if (accessor.cost > PlayerData.instance.coins)
 		{
 			itm.buyButton.interactable = false;
 			
 		}
 
-		if (accessory.premiumCost > PlayerData.instance.premium)
+		if (accessor.premiumCost > PlayerData.instance.premium)
 		{
 			itm.buyButton.interactable = false;
 		}

@@ -1,30 +1,28 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-
-public class ShootBullet : MonoBehaviour
+namespace Characters
 {
-    public GameObject bulletPrefab;    // Префаб пули
-    public Transform bulletSpawnPoint; // Точка, откуда вылетает пуля
-    public float bulletSpeed = 10f;    // Скорость пули
-    public Button shootButton;         // Кнопка, по нажатию на которую пуля вылетает
-
-    private void Start()
+    public class ShootBullet : MonoBehaviour
     {
-        shootButton.onClick.AddListener(Shoot);
-    }
+        public GameObject bulletPrefab;
+        public Transform bulletSpawnPoint;
+        public float bulletSpeed = 10f;
+        public Button shootButton;
 
-    void Shoot()
-    {
-        GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, bulletSpawnPoint.rotation); // Создаем пулю из префаба
-        Rigidbody rb = bullet.GetComponent<Rigidbody>();                                                 // Получаем Rigidbody2D пули
-
-        if (rb != null) // Проверяем, что Rigidbody2D существует
+        private void Start()
         {
-            rb.velocity = bulletSpawnPoint.forward * bulletSpeed; // Задаем скорость пули в направлении, указанном bulletSpawnPoint.up, с заданной скоростью
+            shootButton.onClick.AddListener(Shoot);
+        }
+
+        void Shoot()
+        {
+            GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, bulletSpawnPoint.rotation);
+            Rigidbody rb = bullet.GetComponent<Rigidbody>();
+
+            if (rb != null)
+            {
+                rb.velocity = bulletSpawnPoint.forward * bulletSpeed;
+            }
         }
     }
 }

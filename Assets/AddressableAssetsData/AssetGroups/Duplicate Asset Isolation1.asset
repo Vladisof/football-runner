@@ -1,0 +1,84 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Duplicate Asset Isolation1
+  m_EditorClassIdentifier: 
+  m_GroupName: Duplicate Asset Isolation1
+  m_Data:
+    m_SerializedData: []
+  m_GUID: f1842a3092f9c944185530ceb0c72285
+  m_SerializeEntries:
+  - m_GUID: 1ed94cc8c5eeb8d48aba60aad5bc2dfc
+    m_Address: Assets/Animations/models/Victory.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a85c3d0999ea19742bfa45e4cc31e5bf
+    m_Address: Assets/resurs/game/magnit.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b0300d94f57f56b42bcdc8dd2c4319f8
+    m_Address: Assets/Materials/LightGlow.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 87ddb59e82d8e444aa3a2026f5c87959
+    m_Address: Assets/Textures/LightGlowSquareAlbedo.tif
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 53703d1e7d47f7a4aa2379d62e3b9ad0
+    m_Address: Assets/Materials/MultiplierGlowParticle.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d4f83147ae718cc4cae28bf24590da59
+    m_Address: Assets/Animation/Animators/Multiply.controller
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 968ee66cd79b45a4090925b4d964b490
+    m_Address: Assets/Animation/Multiply.anim
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5efab55597153e940ae69e1f1336f845
+    m_Address: Assets/Hyper Casual Mega Sports/Hyper Casual Baseball/Materials/Baseball
+      Material.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 832e8a34ee7dad44291e4e66314a11df
+    m_Address: Assets/Hyper Casual Mega Sports/Hyper Casual Baseball/Textures/Color
+      Palette.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: aef7038462fa9c54f8c1402ad022bea0
+    m_Address: Assets/Hyper Casual Mega Sports/Hyper Casual Baseball/Models/Bench
+      A.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f8e31abc22fe49d788a22714e0b87b39
+    m_Address: Assets/Hyper Casual Mega Sports/Hyper Casual Mega Football/Models/Goalgate
+      A.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 735e874f947d0e143a6b4e83f8a7283a, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 2fd6552a7a69d4a4587d09399f0db1b5, type: 2}
+    - {fileID: 11400000, guid: a0957fa81ba7c4a40b7068e316f8216a, type: 2}

@@ -12,7 +12,7 @@ public struct ThemeZone
 /// This is an asset which contains all the data for a theme.
 /// As an asset it live in the project folder, and get built into an asset bundle.
 /// </summary>
-[CreateAssetMenu(fileName ="themeData", menuName ="Trash Dash/Theme Data")]
+[CreateAssetMenu(fileName ="themeData", menuName ="Footbal-runner/Theme Data")]
 public class ThemeData : ScriptableObject
 {
     [Header("Theme Data")]

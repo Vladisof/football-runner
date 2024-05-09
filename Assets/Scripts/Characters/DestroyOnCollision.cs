@@ -1,12 +1,14 @@
 using UnityEngine;
-
-public class DestroyOnCollision : MonoBehaviour
+namespace Characters
 {
-  private void OnTriggerEnter(Collider other)
+  public class DestroyOnCollision : MonoBehaviour
   {
-    if (other.CompareTag("Bullet"))
+    private void OnTriggerEnter(Collider other)
     {
-      Destroy(gameObject);
+      if (other.CompareTag("Bullet"))
+      {
+        Destroy(gameObject);
+      }
     }
   }
 }

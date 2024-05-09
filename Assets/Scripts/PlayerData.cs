@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.IO;
 using System.Collections.Generic;
+using Characters;
+using Consumable;
 #if UNITY_ANALYTICS
 using UnityEngine.Analytics;
 #endif
@@ -34,7 +36,7 @@ public class PlayerData
 
     public int coins;
     public int premium;
-    public Dictionary<Consumable.ConsumableType, int> consumables = new Dictionary<Consumable.ConsumableType, int>();   // Inventory of owned consumables and quantity.
+    public Dictionary<Consumable.Consumables.ConsumableType, int> consumables = new Dictionary<Consumable.Consumables.ConsumableType, int>();   // Inventory of owned consumables and quantity.
 
     public List<string> characters = new List<string>();    // Inventory of characters owned.
     public int usedCharacter;                               // Currently equipped character.
@@ -65,7 +67,7 @@ public class PlayerData
     // Then would increment again with every subsequent patches. We kept it to its dev value here for teaching purpose. 
     static int s_Version = 12; 
 
-    public void Consume(Consumable.ConsumableType type)
+    public void Consume(Consumable.Consumables.ConsumableType type)
     {
         if (!consumables.ContainsKey(type))
             return;
@@ -79,7 +81,7 @@ public class PlayerData
         Save();
     }
 
-    public void Add(Consumable.ConsumableType type)
+    public void Add(Consumable.Consumables.ConsumableType type)
     {
         if (!consumables.ContainsKey(type))
         {
@@ -214,7 +216,7 @@ public class PlayerData
             //if we create the PlayerData, mean it's the very first call, so we use that to init the database
             //this allow to always init the database at the earlier we can, i.e. the start screen if started normally on device
             //or the Loadout screen if testing in editor
-		    CoroutineHandler.StartStaticCoroutine(CharacterDatabase.LoadDatabase());
+		    CoroutineHandler.StartStaticCoroutine(CharactersDatabase.LoadDatabase());
 		    CoroutineHandler.StartStaticCoroutine(ThemeDatabase.LoadDatabase());
         }
 
@@ -281,7 +283,7 @@ public class PlayerData
         int consumableCount = r.ReadInt32();
         for (int i = 0; i < consumableCount; ++i)
         {
-            consumables.Add((Consumable.ConsumableType)r.ReadInt32(), r.ReadInt32());
+            consumables.Add((Consumable.Consumables.ConsumableType)r.ReadInt32(), r.ReadInt32());
         }
 
         // Read character.
@@ -400,7 +402,7 @@ public class PlayerData
         w.Write(coins);
 
         w.Write(consumables.Count);
-        foreach(KeyValuePair<Consumable.ConsumableType, int> p in consumables)
+        foreach(KeyValuePair<Consumable.Consumables.ConsumableType, int> p in consumables)
         {
             w.Write((int)p.Key);
             w.Write(p.Value);
@@ -491,7 +493,7 @@ public class PlayerDataEditor : Editor
        
         for(int i = 0; i < ShopItemList.s_ConsumablesTypes.Length; ++i)
         {
-            Consumable c = ConsumableDatabase.GetConsumbale(ShopItemList.s_ConsumablesTypes[i]);
+            Consumable.Consumables c = ConsumablesDatabase.GetConsumbale(ShopItemList.s_ConsumablesTypes[i]);
             if(c != null)
             {
                 PlayerData.instance.consumables[c.GetConsumableType()] = 10;

@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class TutorialState : GameState
+﻿namespace GameManager
 {
+  public class TutorialState : GamesState
+  {
 
+  }
 }

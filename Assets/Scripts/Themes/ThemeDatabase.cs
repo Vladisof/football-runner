@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
 
-// Handles loading data from the Asset Bundle to handle different themes for the game
 public class ThemeDatabase
 {
     static protected Dictionary<string, ThemeData> themeDataList;
@@ -14,7 +13,6 @@ public class ThemeDatabase
 
     static public ThemeData GetThemeData(string type)
     {
-        Debug.Log("GetThemeData: " + type);
         ThemeData list;
         if (themeDataList == null || !themeDataList.TryGetValue(type, out list))
             return null;
@@ -24,7 +22,6 @@ public class ThemeDatabase
 
     static public IEnumerator LoadDatabase()
     {
-        // If not null the dictionary was already loaded.
         if (themeDataList == null)
         {
             themeDataList = new Dictionary<string, ThemeData>();
