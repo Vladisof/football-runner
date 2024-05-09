@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Tracks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Serialization;
@@ -14,7 +15,8 @@ namespace Characters
     private static readonly int sJumpingSpeedHash = Animator.StringToHash("JumpSpeed");
     private static readonly int sSlidingHash = Animator.StringToHash("Sliding");
 
-    public TrackManager trackManager;
+    [FormerlySerializedAs("trackManager")]
+    public TracksManager TracksManager;
     [FormerlySerializedAs("character")]
     public global::Characters.Characters Characters;
     [FormerlySerializedAs("characterCollider")]
@@ -182,7 +184,7 @@ namespace Characters
     public void StopMoving()
     {
       _mIsRunning = false;
-      trackManager.StopMove();
+      TracksManager.StopMove();
 
       if (Characters.animator)
       {
@@ -194,7 +196,7 @@ namespace Characters
     {
       tutorialWaitingForValidation = currentTutorialLevel != tutorialLevel;
 
-      return (!TrackManager.instance.isTutorial || currentTutorialLevel >= tutorialLevel);
+      return (!TracksManager.instance.isTutorial || currentTutorialLevel >= tutorialLevel);
     }
 
     protected void Update()
@@ -276,8 +278,8 @@ namespace Characters
 
       if (_mSliding)
       {
-        float correctSlideLength = slideLength * (1.0f + trackManager.speedRatio);
-        float ratio = (trackManager.worldDistance - _mSlideStart) / correctSlideLength;
+        float correctSlideLength = slideLength * (1.0f + TracksManager.speedRatio);
+        float ratio = (TracksManager.worldDistance - _mSlideStart) / correctSlideLength;
 
         if (ratio >= 1.0f)
         {
@@ -287,10 +289,10 @@ namespace Characters
 
       if (_mJumping)
       {
-        if (trackManager.isMoving)
+        if (TracksManager.isMoving)
         {
-          float correctJumpLength = jumpLength * (1.0f + trackManager.speedRatio);
-          float ratio = (trackManager.worldDistance - _mJumpStart) / correctJumpLength;
+          float correctJumpLength = jumpLength * (1.0f + TracksManager.speedRatio);
+          float ratio = (TracksManager.worldDistance - _mJumpStart) / correctJumpLength;
 
           if (ratio >= 1.0f)
           {
@@ -338,9 +340,9 @@ namespace Characters
       if (_mSliding)
         StopSliding();
 
-      float correctJumpLength = jumpLength * (1.0f + trackManager.speedRatio);
-      _mJumpStart = trackManager.worldDistance;
-      float animSpeed = k_TrackSpeedToJumpAnimSpeedRatio * (trackManager.speed / correctJumpLength);
+      float correctJumpLength = jumpLength * (1.0f + TracksManager.speedRatio);
+      _mJumpStart = TracksManager.worldDistance;
+      float animSpeed = k_TrackSpeedToJumpAnimSpeedRatio * (TracksManager.speed / correctJumpLength);
 
       Characters.animator.SetFloat(sJumpingSpeedHash, animSpeed);
       Characters.animator.SetBool(sJumpingHash, true);
@@ -370,9 +372,9 @@ namespace Characters
       if (_mJumping)
         StopJumping();
 
-      float correctSlideLength = slideLength * (1.0f + trackManager.speedRatio);
-      _mSlideStart = trackManager.worldDistance;
-      float animSpeed = k_TrackSpeedToJumpAnimSpeedRatio * (trackManager.speed / correctSlideLength);
+      float correctSlideLength = slideLength * (1.0f + TracksManager.speedRatio);
+      _mSlideStart = TracksManager.worldDistance;
+      float animSpeed = k_TrackSpeedToJumpAnimSpeedRatio * (TracksManager.speed / correctSlideLength);
 
       Characters.animator.SetFloat(sJumpingSpeedHash, animSpeed);
       Characters.animator.SetBool(sSlidingHash, true);
@@ -404,7 +406,7 @@ namespace Characters
         return;
 
       _mCurrentLane = targetLane;
-      _mTargetPosition = new Vector3((_mCurrentLane - 1) * trackManager.laneOffset, 0, 0);
+      _mTargetPosition = new Vector3((_mCurrentLane - 1) * TracksManager.laneOffset, 0, 0);
     }
 
     public void UseInventory()

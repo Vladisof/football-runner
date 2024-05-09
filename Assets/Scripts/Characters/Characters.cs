@@ -21,7 +21,7 @@ namespace Characters
 		{
 			for (int i = 0; i < accessories.Length; ++i)
 			{
-				accessories[i].gameObject.SetActive(i == PlayerData.instance.usedAccessory);
+				accessories[i].gameObject.SetActive(i == PlayerSaveData.instance.usedAccessory);
 			}
 		}
 	}

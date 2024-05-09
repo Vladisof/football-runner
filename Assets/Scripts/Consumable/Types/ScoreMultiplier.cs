@@ -31,14 +31,14 @@ namespace Consumable.Types
 
             MSinceStart = 0;
 
-            c.trackManager.modifyMultiply += MultiplyModify;
+            c.TracksManager.modifyMultiply += MultiplyModify;
         }
 
         public override void Ended(CharactersInputController c)
         {
             base.Ended(c);
 
-            c.trackManager.modifyMultiply -= MultiplyModify;
+            c.TracksManager.modifyMultiply -= MultiplyModify;
         }
 
         protected int MultiplyModify(int multi)

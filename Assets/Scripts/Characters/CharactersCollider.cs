@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Obstacles;
+using Tracks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Serialization;
@@ -162,16 +164,16 @@ namespace Characters
         if (magnetCoins.Contains(c.gameObject))
           magnetCoins.Remove(c.gameObject);
 
-        if (c.GetComponent<Coin>().isPremium)
+        if (c.GetComponent<Money>().isPremium)
         {
           Addressables.ReleaseInstance(c.gameObject);
-          PlayerData.instance.premium += 1;
+          PlayerSaveData.instance.premium += 1;
           controller.premium += 1;
           m_Audio.PlayOneShot(premiumSound);
         } else
         {
-          Coin.coinPool.Free(c.gameObject);
-          PlayerData.instance.coins += 1 * controller.coinMultiplier;
+          Money.coinPool.Free(c.gameObject);
+          PlayerSaveData.instance.coins += 1 * controller.coinMultiplier;
           controller.AddCoin(1);
           m_Audio.PlayOneShot(coinSound);
         }
@@ -192,7 +194,7 @@ namespace Characters
 
         c.enabled = false;
 
-        Obstacle ob = c.gameObject.GetComponent<Obstacle>();
+        ObtObstacles ob = c.gameObject.GetComponent<ObtObstacles>();
 
         if (ob != null)
         {
@@ -206,7 +208,7 @@ namespace Characters
 
         OnHitObstacle?.Invoke();
         
-        if (TrackManager.instance.isTutorial)
+        if (TracksManager.instance.isTutorial)
         {
           m_TutorialHitObstacle = true;
         } else
@@ -226,12 +228,12 @@ namespace Characters
           m_Audio.PlayOneShot(controller.Characters.deathSound);
 
           m_DeathData.character = controller.Characters.characterName;
-          m_DeathData.themeUsed = controller.trackManager.currentTheme.themeName;
+          m_DeathData.themeUsed = controller.TracksManager.currentThemes.themeName;
           m_DeathData.obstacleType = ob.GetType().ToString();
           m_DeathData.coins = controller.coins;
           m_DeathData.premium = controller.premium;
-          m_DeathData.score = controller.trackManager.score;
-          m_DeathData.worldDistance = controller.trackManager.worldDistance;
+          m_DeathData.score = controller.TracksManager.score;
+          m_DeathData.worldDistance = controller.TracksManager.worldDistance;
 
         }
       } else if (c.gameObject.layer == k_PowerupLayerIndex)

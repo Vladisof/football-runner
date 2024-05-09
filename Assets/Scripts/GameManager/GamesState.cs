@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using Characters;
 using Consumable;
+using Obstacles;
+using Sounds;
 using TMPro;
+using Tracks;
+using UI;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Serialization;
@@ -14,7 +18,8 @@ namespace GameManager
     static readonly int sDeadHash = Animator.StringToHash("Dead");
 
     public Canvas canvas;
-    public TrackManager trackManager;
+    [FormerlySerializedAs("trackManager")]
+    public TracksManager TracksManager;
 
     public AudioClip gameTheme;
 
@@ -60,10 +65,10 @@ namespace GameManager
     public bool comboOnlyAllLaneObstacle;
     public bool comboOnlySlideAndJump;
 
-    public Modifier currentModifier = new Modifier();
+    public Modifiers CurrentModifiers = new Modifiers();
 
     private bool _mFinished;
-    private readonly List<PowerupIcon> _mPowerUpIcons = new List<PowerupIcon>();
+    private readonly List<PowerUpIconGame> _mPowerUpIcons = new List<PowerUpIconGame>();
     private Image [] _mLifeHearts;
 
     private RectTransform _mCountdownRectTransform;
@@ -79,7 +84,7 @@ namespace GameManager
     private bool _mDisplayTutorial;
     private int _mCurrentSegmentObstacleIndex = 0;
     private int _mTutorialCurrentSegmentObstacleIndex = 0;
-    private TrackSegment _mNextValidSegment = null;
+    private TracksSegment _mNextValidSegment = null;
     private readonly int _obstacleToClear = 3;
 
     public override void Enter ()
@@ -93,10 +98,10 @@ namespace GameManager
         _mLifeHearts[i] = lifeRectTransform.GetChild(i).GetComponent<Image>();
       }
 
-      if (MusicPlayer.instance.GetStem(0) != gameTheme)
+      if (SoundPlayer.instance.GetStem(0) != gameTheme)
       {
-        MusicPlayer.instance.SetStem(0, gameTheme);
-        CoroutineHandler.StartStaticCoroutine(MusicPlayer.instance.RestartAllStems());
+        SoundPlayer.instance.SetStem(0, gameTheme);
+        HandlerCoroutineHandler.StartStaticCoroutine(SoundPlayer.instance.RestartAllStems());
       }
 
       _mGameOverSelectionDone = false;
@@ -116,7 +121,7 @@ namespace GameManager
       canvas.gameObject.SetActive(true);
       pauseMenu.gameObject.SetActive(false);
       wholeUI.gameObject.SetActive(true);
-      pauseButton.gameObject.SetActive(!trackManager.isTutorial);
+      pauseButton.gameObject.SetActive(!TracksManager.isTutorial);
       gameOverPopup.SetActive(false);
 
       sideSlideTo.SetActive(false);
@@ -131,16 +136,16 @@ namespace GameManager
       SetComboUIActive(false);
       _combo = 0;
 
-      if (!trackManager.isRerun)
+      if (!TracksManager.isRerun)
       {
-        trackManager.CharactersController.currentLife = trackManager.CharactersController.maxLife;
+        TracksManager.CharactersController.currentLife = TracksManager.CharactersController.maxLife;
       }
 
-      currentModifier.OnRunStart(this);
+      Modifiers.OnRunStart();
 
-      trackManager.CharactersController.CharactersCollider.OnHitObstacle += ResetCombo;
-      _mIsTutorial = !PlayerData.instance.tutorialDone;
-      trackManager.isTutorial = _mIsTutorial;
+      TracksManager.CharactersController.CharactersCollider.OnHitObstacle += ResetCombo;
+      _mIsTutorial = !PlayerSaveData.instance.tutorialDone;
+      TracksManager.isTutorial = _mIsTutorial;
 
       if (_mIsTutorial)
       {
@@ -149,51 +154,53 @@ namespace GameManager
 
         _mDisplayTutorial = true;
 
-        trackManager.newSegmentCreated = segment =>
+        TracksManager.newSegmentCreated = segment =>
         {
-          if (trackManager.currentZone != 0 && !_mCountObstacles && _mNextValidSegment == null)
+          if (TracksManager.currentZone != 0 && !_mCountObstacles && _mNextValidSegment == null)
           {
             _mNextValidSegment = segment;
           }
         };
 
-
-        trackManager.currentSegementChanged = segment =>
+        TracksManager.currentSegmentChanged = segment =>
         {
           _mCurrentSegmentObstacleIndex = 0;
           _mTutorialCurrentSegmentObstacleIndex = 0;
 
-          if (!_mCountObstacles && trackManager.currentSegment == _mNextValidSegment)
+          if (_mCountObstacles || TracksManager.currentSegment != _mNextValidSegment)
           {
-            trackManager.CharactersController.currentTutorialLevel += 1;
-            _mCountObstacles = true;
-            _mNextValidSegment = null;
-            _mDisplayTutorial = true;
-
-            tutorialValidatedObstacles.text = $"{_mTutorialClearedObstacle}/{_obstacleToClear}";
+            return;
           }
+
+          TracksManager.CharactersController.currentTutorialLevel += 1;
+          _mCountObstacles = true;
+          _mNextValidSegment = null;
+          _mDisplayTutorial = true;
+
+          tutorialValidatedObstacles.text = $"{_mTutorialClearedObstacle}/{_obstacleToClear}";
         };
       } else
       {
-        trackManager.newSegmentCreated = segment =>
+        TracksManager.newSegmentCreated = segment =>
         {
-          if (trackManager.currentZone != 0 && !_mCheckObstacle && _mNextValidSegment == null)
+          if (TracksManager.currentZone != 0 && !_mCheckObstacle && _mNextValidSegment == null)
           {
             _mNextValidSegment = segment;
           }
         };
 
-        trackManager.currentSegementChanged = segment =>
+        TracksManager.currentSegmentChanged = segment =>
         {
           _mCurrentSegmentObstacleIndex = 0;
 
-          if (!_mCheckObstacle && trackManager.currentSegment == _mNextValidSegment)
+          if (_mCheckObstacle || TracksManager.currentSegment != _mNextValidSegment)
           {
-            _mNextValidSegment = null;
-
-            _mCheckObstacle = true;
+            return;
           }
 
+          _mNextValidSegment = null;
+
+          _mCheckObstacle = true;
 
         };
       }
@@ -201,10 +208,10 @@ namespace GameManager
       _mFinished = false;
       _mPowerUpIcons.Clear();
 
-      StartCoroutine(trackManager.Begin());
+      StartCoroutine(TracksManager.Begin());
     }
 
-    bool _mCheckObstacle = true;
+    private bool _mCheckObstacle = true;
 
     public override string GetName()
     {
@@ -218,9 +225,9 @@ namespace GameManager
         return;
       }
 
-      if (trackManager.isLoaded)
+      if (TracksManager.isLoaded)
       {
-        CharactersInputController chrCtrl = trackManager.CharactersController;
+        CharactersInputController chrCtrl = TracksManager.CharactersController;
 
         if (chrCtrl.currentLife <= 0)
         {
@@ -231,18 +238,18 @@ namespace GameManager
           StartCoroutine(WaitForGameOver());
         }
         
-        List<Consumable.Consumables> toRemove = new List<Consumable.Consumables>();
-        List<PowerupIcon> toRemoveIcon = new List<PowerupIcon>();
+        List<Consumables> toRemove = new List<Consumables>();
+        List<PowerUpIconGame> toRemoveIcon = new List<PowerUpIconGame>();
 
         foreach (Consumables t in chrCtrl.consumables)
         {
-          PowerupIcon icon = null;
+          PowerUpIconGame iconGame = null;
 
-          foreach (PowerupIcon t1 in _mPowerUpIcons)
+          foreach (PowerUpIconGame t1 in _mPowerUpIcons)
           {
             if (t1.LinkedConsumables == t)
             {
-              icon = t1;
+              iconGame = t1;
               break;
             }
           }
@@ -252,23 +259,23 @@ namespace GameManager
           if (!t.active)
           {
             toRemove.Add(t);
-            toRemoveIcon.Add(icon);
-          } else if (icon == null)
+            toRemoveIcon.Add(iconGame);
+          } else if (iconGame == null)
           {
             GameObject o = Instantiate(PowerUpIconPrefab);
 
-            icon = o.GetComponent<PowerupIcon>();
+            iconGame = o.GetComponent<PowerUpIconGame>();
 
-            icon.LinkedConsumables = t;
-            icon.transform.SetParent(powerUpZone, false);
+            iconGame.LinkedConsumables = t;
+            iconGame.transform.SetParent(powerUpZone, false);
 
-            _mPowerUpIcons.Add(icon);
+            _mPowerUpIcons.Add(iconGame);
           }
         }
 
         for (int i = 0; i < toRemove.Count; ++i)
         {
-          toRemove[i].Ended(trackManager.CharactersController);
+          toRemove[i].Ended(TracksManager.CharactersController);
 
           Addressables.ReleaseInstance(toRemove[i].gameObject);
 
@@ -284,7 +291,7 @@ namespace GameManager
 
         UpdateUI();
 
-        currentModifier.OnRunTick(this);
+        Modifiers.OnRunTick();
       }
     }
 
@@ -311,8 +318,8 @@ namespace GameManager
       pauseButton.gameObject.SetActive(false);
       pauseMenu.gameObject.SetActive(displayMenu);
       wholeUI.gameObject.SetActive(false);
-      _mWasMoving = trackManager.isMoving;
-      trackManager.StopMove();
+      _mWasMoving = TracksManager.isMoving;
+      TracksManager.StopMove();
     }
 
     public void Resume()
@@ -324,7 +331,7 @@ namespace GameManager
 
       if (_mWasMoving)
       {
-        trackManager.StartMove(false);
+        TracksManager.StartMove(false);
       }
 
       AudioListener.pause = false;
@@ -334,46 +341,46 @@ namespace GameManager
     {
       Time.timeScale = 1.0f;
       AudioListener.pause = false;
-      trackManager.End();
-      trackManager.isRerun = false;
-      PlayerData.instance.Save();
+      TracksManager.End();
+      TracksManager.isRerun = false;
+      PlayerSaveData.instance.Save();
       manager.SwitchState("Loadout");
     }
 
     private void UpdateUI()
     {
-      coinText.text = trackManager.CharactersController.coins.ToString();
-      coinMultiplierText.text = "x " + trackManager.multiplier;
+      coinText.text = TracksManager.CharactersController.coins.ToString();
+      coinMultiplierText.text = "x " + TracksManager.multiplier;
 
-      premiumText.text = trackManager.CharactersController.premium.ToString();
+      premiumText.text = TracksManager.CharactersController.premium.ToString();
 
       for (int i = 0; i < 3; ++i)
       {
 
-        _mLifeHearts[i].color = trackManager.CharactersController.currentLife > i ? Color.white : Color.black;
+        _mLifeHearts[i].color = TracksManager.CharactersController.currentLife > i ? Color.white : Color.black;
       }
 
-      scoreText.text = trackManager.score.ToString();
-      scoreMultiplierText.text = "x " + trackManager.multiplier;
+      scoreText.text = TracksManager.score.ToString();
+      scoreMultiplierText.text = "x " + TracksManager.multiplier;
 
 
 
-      distanceText.text = Mathf.FloorToInt(trackManager.worldDistance).ToString() + "m";
+      distanceText.text = Mathf.FloorToInt(TracksManager.worldDistance).ToString() + "m";
 
-      if (trackManager.timeToStart >= 0)
+      if (TracksManager.timeToStart >= 0)
       {
         countdownText.gameObject.SetActive(true);
-        countdownText.text = Mathf.Ceil(trackManager.timeToStart).ToString();
-        _mCountdownRectTransform.localScale = Vector3.one * (1.0f - (trackManager.timeToStart - Mathf.Floor(trackManager.timeToStart)));
+        countdownText.text = Mathf.Ceil(TracksManager.timeToStart).ToString();
+        _mCountdownRectTransform.localScale = Vector3.one * (1.0f - (TracksManager.timeToStart - Mathf.Floor(TracksManager.timeToStart)));
       } else
       {
         _mCountdownRectTransform.localScale = Vector3.zero;
       }
       
-      if (trackManager.CharactersController.inventory != null)
+      if (TracksManager.CharactersController.inventory != null)
       {
         inventoryIcon.transform.parent.gameObject.SetActive(true);
-        inventoryIcon.sprite = trackManager.CharactersController.inventory.icon;
+        inventoryIcon.sprite = TracksManager.CharactersController.inventory.icon;
       } else
         inventoryIcon.transform.parent.gameObject.SetActive(false);
     }
@@ -381,15 +388,15 @@ namespace GameManager
     private IEnumerator WaitForGameOver()
     {
       _mFinished = true;
-      trackManager.StopMove();
+      TracksManager.StopMove();
       
       Shader.SetGlobalFloat("_BlinkingValue", 0.0f);
 
       yield return new WaitForSeconds(2.0f);
 
-      if (currentModifier.OnRunEnd(this))
+      if (Modifiers.OnRunEnd())
       {
-        if (trackManager.isRerun)
+        if (TracksManager.isRerun)
           manager.SwitchState("GameOver");
         else
           OpenGameOverPopup();
@@ -398,22 +405,22 @@ namespace GameManager
 
     private void ClearPowerUp()
     {
-      foreach (PowerupIcon t in _mPowerUpIcons)
+      foreach (PowerUpIconGame t in _mPowerUpIcons)
       {
         if (t != null)
           Destroy(t.gameObject);
       }
 
-      trackManager.CharactersController.powerUpSource.Stop();
+      TracksManager.CharactersController.powerUpSource.Stop();
 
       _mPowerUpIcons.Clear();
     }
 
     private void OpenGameOverPopup()
     {
-      premiumForLifeButton.interactable = PlayerData.instance.premium >= 3;
+      premiumForLifeButton.interactable = PlayerSaveData.instance.premium >= 3;
 
-      premiumCurrencyOwned.text = PlayerData.instance.premium.ToString();
+      premiumCurrencyOwned.text = PlayerSaveData.instance.premium.ToString();
 
       ClearPowerUp();
 
@@ -432,20 +439,20 @@ namespace GameManager
         return;
 
       _mGameOverSelectionDone = true;
-      PlayerData.instance.premium -= 3;
-      trackManager.CharactersController.premium -= Mathf.Min(trackManager.CharactersController.premium, 3);
+      PlayerSaveData.instance.premium -= 3;
+      TracksManager.CharactersController.premium -= Mathf.Min(TracksManager.CharactersController.premium, 3);
 
       SecondWind();
     }
 
     private void SecondWind()
     {
-      trackManager.CharactersController.currentLife = 1;
-      trackManager.isRerun = true;
+      TracksManager.CharactersController.currentLife = 1;
+      TracksManager.isRerun = true;
       StartGame();
     }
 
-    private TrackSegment _currentSeg;
+    private TracksSegment _currentSeg;
     private float _debugRatio;
     private float _debugNePos;
 
@@ -492,7 +499,7 @@ namespace GameManager
     private void SetComboCount (int count)
     {
       _combo = count;
-      trackManager.bonusSpeed = trackManager.bonusSpeedEachCombo * _combo;
+      TracksManager.bonusSpeed = TracksManager.bonusSpeedEachCombo * _combo;
     }
 
     private void ResetCombo()
@@ -503,13 +510,13 @@ namespace GameManager
 
     private void HandleAvoid()
     {
-      if (trackManager.segments.Count == 0)
+      if (TracksManager.segments.Count == 0)
         return;
 
-      if (trackManager.currentSegment.SpawnedObstacles.Count == 0)
+      if (TracksManager.currentSegment.SpawnedObstacles.Count == 0)
         return;
 
-      float ratio = trackManager.currentSegmentDistance / trackManager.currentSegment.worldLength;
+      float ratio = TracksManager.currentSegmentDistance / TracksManager.currentSegment.worldLength;
 
       if (_mIsTutorial)
         TutorialCheckObstacleClear(ratio, GetNextObstaclePos(_mTutorialCurrentSegmentObstacleIndex), ref _mTutorialCurrentSegmentObstacleIndex);
@@ -520,7 +527,7 @@ namespace GameManager
 
     private float GetNextObstaclePos (int obstacleIndex)
     {
-      return obstacleIndex < trackManager.currentSegment.obstaclePositions.Length ? trackManager.currentSegment.obstaclePositions[obstacleIndex] : float.MaxValue;
+      return obstacleIndex < TracksManager.currentSegment.obstaclePositions.Length ? TracksManager.currentSegment.obstaclePositions[obstacleIndex] : float.MaxValue;
 
     }
 
@@ -528,24 +535,24 @@ namespace GameManager
     {
       if (_mCheckObstacle && ratio > nextObstaclePosition + 0.01f)
       {
-        float detectingObstaclePos = trackManager.currentSegment.obstaclePositions[obstacleIndex];
+        float detectingObstaclePos = TracksManager.currentSegment.obstaclePositions[obstacleIndex];
 
         obstacleIndex += 1;
 
-        if (!trackManager.CharactersController.CharactersCollider.WasHitObstacle)
+        if (!TracksManager.CharactersController.CharactersCollider.WasHitObstacle)
         {
           bool addedCombo = false;
-          _shouldSlide = trackManager.CharactersController.CharactersCollider.shouldHaveSlided;
-          _shouldJump = trackManager.CharactersController.CharactersCollider.shouldHaveJumped;
+          _shouldSlide = TracksManager.CharactersController.CharactersCollider.shouldHaveSlided;
+          _shouldJump = TracksManager.CharactersController.CharactersCollider.shouldHaveJumped;
 
-          foreach (var value in trackManager.currentSegment.SpawnedObstacleAtPos[detectingObstaclePos])
+          foreach (var value in TracksManager.currentSegment.SpawnedObstacleAtPos[detectingObstaclePos])
           {
             if (addedCombo)
               break;
           
             if (comboOnlyAllLaneObstacle)
             {
-              if ((value as AllLaneObstacle) == false)
+              if ((value as AllLanesObtObstacles) == false)
                 continue;
             }
           
@@ -569,12 +576,12 @@ namespace GameManager
 
         }
 
-        trackManager.CharactersController.CharactersCollider.WasHitObstacle = false;
+        TracksManager.CharactersController.CharactersCollider.WasHitObstacle = false;
 
       } else
       {
-        _shouldSlide = trackManager.CharactersController.CharactersCollider.shouldHaveSlided;
-        _shouldJump = trackManager.CharactersController.CharactersCollider.shouldHaveJumped;
+        _shouldSlide = TracksManager.CharactersController.CharactersCollider.shouldHaveSlided;
+        _shouldJump = TracksManager.CharactersController.CharactersCollider.shouldHaveJumped;
       }
 
 
@@ -583,7 +590,7 @@ namespace GameManager
 
     private void TutorialCheckObstacleClear (float ratio, float nextObstaclePosition, ref int obstacleIndex)
     {
-      if (AudioListener.pause && !trackManager.CharactersController.tutorialWaitingForValidation)
+      if (AudioListener.pause && !TracksManager.CharactersController.tutorialWaitingForValidation)
       {
         _mDisplayTutorial = false;
         DisplayTutorial(false);
@@ -594,13 +601,13 @@ namespace GameManager
       {
         obstacleIndex += 1;
 
-        if (!trackManager.CharactersController.CharactersCollider.tutorialHitObstacle)
+        if (!TracksManager.CharactersController.CharactersCollider.tutorialHitObstacle)
         {
           _mTutorialClearedObstacle += 1;
           tutorialValidatedObstacles.text = $"{_mTutorialClearedObstacle}/{_obstacleToClear}";
         }
 
-        trackManager.CharactersController.CharactersCollider.tutorialHitObstacle = false;
+        TracksManager.CharactersController.CharactersCollider.tutorialHitObstacle = false;
 
         if (_mTutorialClearedObstacle != _obstacleToClear)
         {
@@ -610,16 +617,16 @@ namespace GameManager
         _mTutorialClearedObstacle = 0;
         _mCountObstacles = false;
         _mNextValidSegment = null;
-        trackManager.ChangeZone();
+        TracksManager.ChangeZone();
 
         tutorialValidatedObstacles.text = "Passed!";
 
-        if (trackManager.currentZone != 0)
+        if (TracksManager.currentZone != 0)
         {
           return;
         }
 
-        trackManager.CharactersController.currentTutorialLevel = 3;
+        TracksManager.CharactersController.currentTutorialLevel = 3;
         DisplayTutorial(true);
       } else if (_mDisplayTutorial && ratio > nextObstaclePosition - 0.1f)
         DisplayTutorial(true);
@@ -634,24 +641,24 @@ namespace GameManager
         Resume();
       }
 
-      switch (trackManager.CharactersController.currentTutorialLevel)
+      switch (TracksManager.CharactersController.currentTutorialLevel)
       {
         case 0:
           sideSlideTo.SetActive(value);
-          trackManager.CharactersController.tutorialWaitingForValidation = value;
+          TracksManager.CharactersController.tutorialWaitingForValidation = value;
           break;
         case 1:
           upSlideTo.SetActive(value);
-          trackManager.CharactersController.tutorialWaitingForValidation = value;
+          TracksManager.CharactersController.tutorialWaitingForValidation = value;
           break;
         case 2:
           downSlideTo.SetActive(value);
-          trackManager.CharactersController.tutorialWaitingForValidation = value;
+          TracksManager.CharactersController.tutorialWaitingForValidation = value;
           break;
         case 3:
           finishTo.SetActive(true);
-          trackManager.CharactersController.StopSliding();
-          trackManager.CharactersController.tutorialWaitingForValidation = value;
+          TracksManager.CharactersController.StopSliding();
+          TracksManager.CharactersController.tutorialWaitingForValidation = value;
           break;
       }
     }
@@ -659,8 +666,8 @@ namespace GameManager
 
     public void FinishTutorial()
     {
-      PlayerData.instance.tutorialDone = true;
-      PlayerData.instance.Save();
+      PlayerSaveData.instance.tutorialDone = true;
+      PlayerSaveData.instance.Save();
 
       QuitToLoadout();
     }

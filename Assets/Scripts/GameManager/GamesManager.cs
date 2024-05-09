@@ -30,7 +30,7 @@ namespace GameManager
 
     protected void OnEnable()
     {
-      PlayerData.Create();
+      PlayerSaveData.Create();
 
       _sInstance = this;
 

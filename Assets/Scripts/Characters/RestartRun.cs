@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Tracks;
+using UnityEngine;
 namespace Characters
 {
     public class RestartRun : StateMachineBehaviour
@@ -10,7 +11,7 @@ namespace Characters
             if (animator.GetBool(s_DeadHash))
                 return; 
         
-            TrackManager.instance.StartMove();
+            TracksManager.instance.StartMove();
         }
 
     }

@@ -37,9 +37,9 @@ namespace Consumable.Types
 
 			for(int i = 0; i< nb; ++i)
 			{
-				Coin returnCoin = _returnCalls[i].GetComponent<Coin>();
+				Money returnMoney = _returnCalls[i].GetComponent<Money>();
 
-				if (returnCoin != null && !returnCoin.isPremium && !c.CharactersCollider.magnetCoins.Contains(returnCoin.gameObject))
+				if (returnMoney != null && !returnMoney.isPremium && !c.CharactersCollider.magnetCoins.Contains(returnMoney.gameObject))
 				{
 					_returnCalls[i].transform.SetParent(c.transform);
 					c.CharactersCollider.magnetCoins.Add(_returnCalls[i].gameObject);

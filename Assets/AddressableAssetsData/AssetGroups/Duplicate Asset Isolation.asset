@@ -62,11 +62,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 1fa0d134c763a194ea3daba8ff85489a
-    m_Address: Assets/Animation/Rat_Run.fbx
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 24a05966196c7fc4380001ad323f651e
     m_Address: Assets/Models/Daytime/WheelyBinBlue.fbx
     m_ReadOnly: 0
@@ -187,11 +182,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 692deea899152264f8419135ceefafcb
-    m_Address: Assets/Sounds/SFX/Rat/RatLoop1.ogg
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 69829cac8b260bf41b9f2f02e4309ca8
     m_Address: Assets/Materials/BinBag.mat
     m_ReadOnly: 0
@@ -287,11 +277,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 90690b03aaccb6e4a96d2cdb757b3b44
-    m_Address: Assets/Sounds/SFX/Rat/RatHit.ogg
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 913d0a2c575c9bf42b172000a39bcfc0
     m_Address: Assets/Textures/Graffiti/Graffiti07.png
     m_ReadOnly: 0
@@ -299,11 +284,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 93d8fc18fdc65dd4aa903210d93f3343
     m_Address: Assets/Shaders/CurvedUnlit.shader
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 97d3d75c59ef7f544808ac9ea51905f2
-    m_Address: Assets/Animation/Rat_Death.fbx
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -369,11 +349,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a4d34a3bbaf4fee48a79af8df924ce78
     m_Address: Assets/Textures/DumpsterAlbedo.tif
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a683c76e59dd6b04a9420526560624a0
-    m_Address: Assets/Sounds/SFX/Rat/RatLoop2.ogg
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

@@ -1348,6 +1348,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114322282601092784, guid: fc9855a6b2a67364ebc0db28e7bbc98b, type: 3}
+      propertyPath: stems.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114322282601092784, guid: fc9855a6b2a67364ebc0db28e7bbc98b, type: 3}
+      propertyPath: stems.Array.data[0].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 28409e4394a317c44a3201b6fa41be32, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2878,11 +2886,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   manager: {fileID: 0}
-  trackManager: {fileID: 1958487560}
+  TracksManager: {fileID: 1958487560}
   canvas: {fileID: 455205751}
   missionPopup: {fileID: 114000012026198332}
-  gameOverTheme: {fileID: 8300000, guid: 15e26518785848f4caf8ba236b4d0690, type: 3}
-  miniLeaderboard: {fileID: 859562874}
+  gameOverTheme: {fileID: 8300000, guid: 09607adc0c4704946b73002f18ca4375, type: 3}
+  MiniLeaderSheep: {fileID: 859562874}
 --- !u!114 &455205753
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3972,7 +3980,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -1.9999695, y: 0}
+  m_AnchoredPosition: {x: -2, y: 0}
   m_SizeDelta: {x: 335, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &576403259
@@ -5897,7 +5905,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 58.7
+  field of view: 66
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -5924,7 +5932,7 @@ Transform:
   m_GameObject: {fileID: 704408728}
   serializedVersion: 2
   m_LocalRotation: {x: 0.1300676, y: 0, z: 0, w: 0.99150515}
-  m_LocalPosition: {x: 0, y: 4, z: -3}
+  m_LocalPosition: {x: 0, y: 3.89, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8127,11 +8135,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25fdfddad24797441b26b254fee9b949, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entriesRoot: {fileID: 859562870}
+  entriesLeadRoot: {fileID: 859562870}
   entriesCount: 6
   playerEntry: {fileID: 576403260}
   forcePlayerDisplay: 1
-  displayPlayer: 1
+  displayLeadPlayer: 1
 --- !u!1001 &860597505
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8460,21 +8468,21 @@ MonoBehaviour:
   themeNameDisplay: {fileID: 1403348308}
   themeSelect: {fileID: 1320600321}
   themeIcon: {fileID: 1573491673}
-  powerupSelect: {fileID: 1667271468}
-  powerupIcon: {fileID: 590977525}
-  powerupCount: {fileID: 1957119033}
+  powerUpSelect: {fileID: 1667271468}
+  powerUpIcon: {fileID: 590977525}
+  powerUpCount: {fileID: 1957119033}
   noItemIcon: {fileID: 21300000, guid: 19bbc34b2e766e245a84506b8ae0512c, type: 3}
   accessoriesSelector: {fileID: 1540953231}
-  accesoryNameDisplay: {fileID: 1581550612}
+  accessoryNameDisplay: {fileID: 1581550612}
   accessoryIconDisplay: {fileID: 1523852862}
-  leaderboard: {fileID: 0}
+  LeaderSheep: {fileID: 0}
   missionPopup: {fileID: 114000012431014915}
   runButton: {fileID: 1393864684}
   tutorialBlocker: {fileID: 1557869168}
   tutorialPrompt: {fileID: 610653253}
   backgroundMenu: {fileID: 1000011084573293}
-  menuTheme: {fileID: 8300000, guid: 1588137430bfbab4b9a00ba3b220b82b, type: 3}
-  consumableIcon: {fileID: 11439736, guid: 0c5f0793b82536342bd64bc3e3fdee8a, type: 3}
+  menuTheme: {fileID: 8300000, guid: a7660ae4137781b48b94b5feac15a534, type: 3}
+  ConsumablesIcon: {fileID: 11439736, guid: 0c5f0793b82536342bd64bc3e3fdee8a, type: 3}
 --- !u!1 &878427076
 GameObject:
   m_ObjectHideFlags: 0
@@ -11934,7 +11942,7 @@ MonoBehaviour:
   coinSound: {fileID: 8300000, guid: 62c15b4aac9d60e4a963f4f55d31e706, type: 3}
   premiumSound: {fileID: 8300000, guid: 553f1d03da54003479f6ff63d3155919, type: 3}
   magnetCoins: []
-  obstacleMask:
+  _obstacleMask:
     serializedVersion: 2
     m_Bits: 512
   isShieldEnabled: 0
@@ -12899,8 +12907,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   manager: {fileID: 0}
   canvas: {fileID: 1245236424}
-  trackManager: {fileID: 1958487560}
-  gameTheme: {fileID: 8300000, guid: b341b9410b3c5274e8b15199f3b95fb5, type: 3}
+  TracksManager: {fileID: 1958487560}
+  gameTheme: {fileID: 8300000, guid: 28409e4394a317c44a3201b6fa41be32, type: 3}
   coinText: {fileID: 50343044}
   premiumText: {fileID: 1226467021}
   scoreText: {fileID: 780872366}
@@ -12910,7 +12918,7 @@ MonoBehaviour:
   countdownText: {fileID: 1918110240}
   comboText: {fileID: 1807085081}
   comboUI: {fileID: 736137856}
-  powerupZone: {fileID: 536392328}
+  powerUpZone: {fileID: 536392328}
   lifeRectTransform: {fileID: 2036954777}
   pauseMenu: {fileID: 1659149218}
   wholeUI: {fileID: 1005048469}
@@ -12919,16 +12927,16 @@ MonoBehaviour:
   gameOverPopup: {fileID: 1731455304}
   premiumForLifeButton: {fileID: 1784961613}
   premiumCurrencyOwned: {fileID: 560657060}
-  PowerupIconPrefab: {fileID: 102596, guid: 94cb557246c11d14388842cc08be79a8, type: 3}
+  PowerUpIconPrefab: {fileID: 102596, guid: 94cb557246c11d14388842cc08be79a8, type: 3}
   tutorialValidatedObstacles: {fileID: 821251252}
-  sideSlideTuto: {fileID: 1094069291}
-  upSlideTuto: {fileID: 428968435}
-  downSlideTuto: {fileID: 1984826506}
-  finishTuto: {fileID: 52346560}
+  sideSlideTo: {fileID: 1094069291}
+  upSlideTo: {fileID: 428968435}
+  downSlideTo: {fileID: 1984826506}
+  finishTo: {fileID: 52346560}
   comboOnlyOneEachObstaclePos: 1
   comboOnlyAllLaneObstacle: 0
   comboOnlySlideAndJump: 1
-  minComboForDisplay: 1
+  _minComboForDisplay: 1
 --- !u!1 &1246755868
 GameObject:
   m_ObjectHideFlags: 0
@@ -13058,7 +13066,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1971115931}
         m_TargetAssemblyTypeName: SettingPopup, Assembly-CSharp
-        m_MethodName: MasterSFXVolumeChangeValue
+        m_MethodName: MasterSfxVolumeChangeValue
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -13104,7 +13112,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -45.50006, y: -0.0000019073}
+  m_AnchoredPosition: {x: -45.5, y: -0.0000019073}
   m_SizeDelta: {x: 122, y: 170}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &1264732169
@@ -13292,6 +13300,7 @@ GameObject:
   - component: {fileID: 1267313282}
   - component: {fileID: 1267313281}
   - component: {fileID: 1267313280}
+  - component: {fileID: 1267313284}
   m_Layer: 0
   m_Name: BulletButton
   m_TagString: Untagged
@@ -13313,10 +13322,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1005048469}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1062, y: -292}
-  m_SizeDelta: {x: 310.11, y: 230.6}
+  m_AnchorMin: {x: 1, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: -65, y: -446}
+  m_SizeDelta: {x: 160.8, y: 112.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1267313280
 MonoBehaviour:
@@ -13416,6 +13425,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1267313278}
   m_CullTransparentMesh: 1
+--- !u!114 &1267313284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1267313278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 8, y: 8}
+  m_UseGraphicAlpha: 1
 --- !u!4 &1268064809 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ee8a7cbe38b54b0cb2cdcf0f75c9a9ef, type: 3}
@@ -16214,7 +16238,7 @@ MonoBehaviour:
   - {fileID: 869760749}
   - {fileID: 1245236425}
   - {fileID: 455205752}
-  m_ConsumableDatabase: {fileID: 11400000, guid: 5d316f81231c9964dadda0b50ca7ae6b, type: 2}
+  MConsumablesDatabase: {fileID: 11400000, guid: 5d316f81231c9964dadda0b50ca7ae6b, type: 2}
 --- !u!4 &1565788661
 Transform:
   m_ObjectHideFlags: 0
@@ -20513,18 +20537,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 357943a8c88ecc848b7f5de152a00562, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterController: {fileID: 2094493432}
+  CharactersController: {fileID: 2094493432}
   minSpeed: 10
   maxSpeed: 30
   speedStep: 4
   laneOffset: 1.5
   bonusSpeedEachCombo: 0.3
   invincible: 0
-  consumableDatabase: {fileID: 11400000, guid: 5d316f81231c9964dadda0b50ca7ae6b, type: 2}
+  ConsumablesDatabase: {fileID: 11400000, guid: 5d316f81231c9964dadda0b50ca7ae6b, type: 2}
   skyMeshFilter: {fileID: 201362454}
   parallaxRoot: {fileID: 1617204952}
   parallaxRatio: 0.8
-  tutorialThemeData: {fileID: 11400000, guid: d2594127ff496284399060a56ff8ad68, type: 2}
+  TutorialThemesData: {fileID: 11400000, guid: d2594127ff496284399060a56ff8ad68, type: 2}
   bonusSpeed: 0
 --- !u!4 &1958487561
 Transform:
@@ -20731,8 +20755,8 @@ MonoBehaviour:
   mixer: {fileID: 24100000, guid: 3b7e99a6684bf49fa9bad5f4bb585fab, type: 2}
   masterSlider: {fileID: 1872918132}
   musicSlider: {fileID: 1826149887}
-  masterSFXSlider: {fileID: 1260468401}
-  loadoutState: {fileID: 869760749}
+  MasterSfxSlider: {fileID: 1260468401}
+  LoadOutState: {fileID: 869760749}
   confirmationPopup: {fileID: 1918594631}
 --- !u!114 &1971115932
 MonoBehaviour:
@@ -26329,9 +26353,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce47d421cd0db864a9139849f62dedeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trackManager: {fileID: 1958487560}
-  character: {fileID: 0}
-  characterCollider: {fileID: 1144878499}
+  TracksManager: {fileID: 1958487560}
+  Characters: {fileID: 0}
+  CharactersCollider: {fileID: 1144878499}
   blobShadow: {fileID: 184212906}
   laneChangeSpeed: 14
   maxLife: 3
@@ -26341,7 +26365,7 @@ MonoBehaviour:
   slideLength: 7
   slideSound: {fileID: 8300000, guid: febd5a5a8b245774fbfa9f0bef51e0b6, type: 3}
   powerUpUseSound: {fileID: 8300000, guid: defdb98bfddc24748aead1ce73ba7972, type: 3}
-  powerupSource: {fileID: 2094493435}
+  powerUpSource: {fileID: 2094493435}
   currentTutorialLevel: 0
   tutorialWaitingForValidation: 0
 --- !u!4 &2094493433

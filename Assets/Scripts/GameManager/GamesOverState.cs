@@ -1,38 +1,44 @@
 ﻿using Characters;
+using Sounds;
+using Tracks;
+using UI;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace GameManager
 {
   public class GamesOverState : SwState
   {
-    public TrackManager trackManager;
+    [FormerlySerializedAs("trackManager")]
+    public TracksManager TracksManager;
     public Canvas canvas;
-    public MissionUI missionPopup;
+    public UI.Missions missionPopup;
 
     public AudioClip gameOverTheme;
 
-    public Leaderboard miniLeaderboard;
+    [FormerlySerializedAs("MiniLeaderSheap"),FormerlySerializedAs("miniLeaderboard")]
+    public LeaderSheep MiniLeaderSheep;
 
     public override void Enter ()
     {
       canvas.gameObject.SetActive(true);
 
-      miniLeaderboard.playerEntry.inputName.text = PlayerData.instance.previousName;
+      MiniLeaderSheep.playerEntry.inputName.text = PlayerSaveData.instance.previousName;
 
-      miniLeaderboard.playerEntry.score.text = trackManager.score.ToString();
-      miniLeaderboard.Populate();
+      MiniLeaderSheep.playerEntry.score.text = TracksManager.score.ToString();
+      MiniLeaderSheep.Populate();
 
-      if (PlayerData.instance.AnyMissionComplete())
+      if (PlayerSaveData.instance.AnyMissionComplete())
         StartCoroutine(missionPopup.Open());
       else
         missionPopup.gameObject.SetActive(false);
 
       CreditCoins();
 
-      if (MusicPlayer.instance.GetStem(0) != gameOverTheme)
+      if (SoundPlayer.instance.GetStem(0) != gameOverTheme)
       {
-        MusicPlayer.instance.SetStem(0, gameOverTheme);
-        StartCoroutine(MusicPlayer.instance.RestartAllStems());
+        SoundPlayer.instance.SetStem(0, gameOverTheme);
+        StartCoroutine(SoundPlayer.instance.RestartAllStems());
       }
     }
 
@@ -58,40 +64,40 @@ namespace GameManager
 
     public void GoToLoadout()
     {
-      trackManager.isRerun = false;
+      TracksManager.isRerun = false;
       manager.SwitchState("Loadout");
     }
 
     public void RunAgain()
     {
-      trackManager.isRerun = false;
+      TracksManager.isRerun = false;
       manager.SwitchState("Game");
     }
 
     private static void CreditCoins()
     {
-      PlayerData.instance.Save();
+      PlayerSaveData.instance.Save();
 
 
     }
 
     private void FinishRun()
     {
-      if (miniLeaderboard.playerEntry.inputName.text == "")
+      if (MiniLeaderSheep.playerEntry.inputName.text == "")
       {
-        miniLeaderboard.playerEntry.inputName.text = "Football";
+        MiniLeaderSheep.playerEntry.inputName.text = "Football";
       } else
       {
-        PlayerData.instance.previousName = miniLeaderboard.playerEntry.inputName.text;
+        PlayerSaveData.instance.previousName = MiniLeaderSheep.playerEntry.inputName.text;
       }
 
-      PlayerData.instance.InsertScore(trackManager.score, miniLeaderboard.playerEntry.inputName.text);
+      PlayerSaveData.instance.InsertScore(TracksManager.score, MiniLeaderSheep.playerEntry.inputName.text);
 
-      CharactersCollider.DeathEvent de = trackManager.CharactersController.CharactersCollider.deathData;
+      CharactersCollider.DeathEvent de = TracksManager.CharactersController.CharactersCollider.deathData;
 
-      PlayerData.instance.Save();
+      PlayerSaveData.instance.Save();
 
-      trackManager.End();
+      TracksManager.End();
     }
 
   }

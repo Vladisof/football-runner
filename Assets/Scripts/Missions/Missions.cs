@@ -1,287 +1,309 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
+using Obstacles;
+using Tracks;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-/// <summary>
-/// Base abstract class used to define a mission the player needs to complete to gain some premium currency.
-/// Subclassed for every mission.
-/// </summary>
-public abstract class MissionBase
+namespace Missions
 {
-    // Mission type
-    public enum MissionType
+  public abstract class MissionsBase
+  {
+    public enum MissionsType
     {
-        SINGLE_RUN,
-        PICKUP,
-        OBSTACLE_JUMP,
-        SLIDING,
-        MULTIPLIER,
-        MAX
+      SINGL_RUN,
+      PICKUP,
+      OBSTACL_JUMP,
+      SLID,
+      MULTIPLIER,
+      MAXED
     }
 
     public float progress;
     public float max;
     public int reward;
 
-    public bool isComplete { get { return (progress / max) >= 1.0f; } }
+    public bool isComplete => progress / max >= 1.0f;
 
-    public void Serialize(BinaryWriter w)
+    public void Serialize (BinaryWriter w)
     {
-        w.Write(progress);
-        w.Write(max);
-        w.Write(reward);
-    } 
-
-    public void Deserialize(BinaryReader r)
-    {
-        progress = r.ReadSingle();
-        max = r.ReadSingle();
-        reward = r.ReadInt32();
+      w.Write(progress);
+      w.Write(max);
+      w.Write(reward);
     }
 
-	public virtual bool HaveProgressBar() { return true; }
+    public void Deserialize (BinaryReader r)
+    {
+      progress = r.ReadSingle();
+      max = r.ReadSingle();
+      reward = r.ReadInt32();
+    }
 
     public abstract void Created();
-    public abstract MissionType GetMissionType();
+
+    public abstract MissionsType GetMissionType();
+
     public abstract string GetMissionDesc();
-    public abstract void RunStart(TrackManager manager);
-    public abstract void Update(TrackManager manager);
 
-    static public MissionBase GetNewMissionFromType(MissionType type)
+    public abstract void RunStart (TracksManager manager);
+
+    public abstract void Update (TracksManager manager);
+
+    public static MissionsBase GetNewMissionFromType (MissionsType type)
     {
-        switch (type)
-        {
-            case MissionType.SINGLE_RUN:
-                return new SingleRunMission();
-            case MissionType.PICKUP:
-                return new PickupMission();
-            case MissionType.OBSTACLE_JUMP:
-                return new BarrierJumpMission();
-            case MissionType.SLIDING:
-                return new SlidingMission();
-            case MissionType.MULTIPLIER:
-                return new MultiplierMission();
-        }
+      return type switch
+      {
+        MissionsType.SINGL_RUN => new SingleMissions(),
+        MissionsType.PICKUP => new PickupMissions(),
+        MissionsType.OBSTACL_JUMP => new BarrierJumpMissions(),
+        MissionsType.SLID => new SlidingMissions(),
+        MissionsType.MULTIPLIER => new MultiplierMission(),
+        _ => null
+      };
 
-        return null;
     }
-}
+  }
 
-public class SingleRunMission : MissionBase
-{
+  public sealed class SingleMissions : MissionsBase
+  {
     public override void Created()
     {
-        float[] maxValues = { 500, 1000, 1500, 2000 };
-        int choosenVal = Random.Range(0, maxValues.Length);
+      float [] maxValues =
+      {
+        500,
+        1000,
+        1500,
+        2000
+      };
 
-        reward = choosenVal + 1;
-        max = maxValues[choosenVal];
-        progress = 0;
-    }
+      int chosenVal = Random.Range(0, maxValues.Length);
 
-	public override bool HaveProgressBar()
-	{
-		return false;
-	}
-
-	public override string GetMissionDesc()
-    {
-        return "Run " + ((int)max) + "m in a single run";
-    }
-
-    public override MissionType GetMissionType()
-    {
-        return MissionType.SINGLE_RUN;
-    }
-
-    public override void RunStart(TrackManager manager)
-    {
-        progress = 0;
-    }
-
-    public override void Update(TrackManager manager)
-    {
-        progress = manager.worldDistance;
-    }
-}
-
-public class PickupMission : MissionBase
-{
-    int previousCoinAmount;
-
-    public override void Created()
-    {
-        float[] maxValues = { 1000, 2000, 3000, 4000 };
-        int choosen = Random.Range(0, maxValues.Length);
-
-        max = maxValues[choosen];
-        reward = choosen + 1;
-        progress = 0;
+      reward = chosenVal + 1;
+      max = maxValues[chosenVal];
+      progress = 0;
     }
 
     public override string GetMissionDesc()
     {
-        return "Pickup " + max + " fishbones";
+      return "Run " + ((int)max) + "m in a single run";
     }
 
-    public override MissionType GetMissionType()
+    public override MissionsType GetMissionType()
     {
-        return MissionType.PICKUP;
+      return MissionsType.SINGL_RUN;
     }
 
-    public override void RunStart(TrackManager manager)
+    public override void RunStart (TracksManager manager)
     {
-        previousCoinAmount = 0;
+      progress = 0;
     }
 
-    public override void Update(TrackManager manager)
+    public override void Update (TracksManager manager)
     {
-        int coins = manager.CharactersController.coins - previousCoinAmount;
-        progress += coins;
-
-        previousCoinAmount = manager.CharactersController.coins;
+      progress = manager.worldDistance;
     }
-}
+  }
 
-public class BarrierJumpMission : MissionBase
-{
-    Obstacle m_Previous;
-    Collider[] m_Hits;
+  public class PickupMissions : MissionsBase
+  {
+    int _previousCoinAmount;
 
-    protected const int k_HitColliderCount = 8;
-    protected readonly Vector3 k_CharacterColliderSizeOffset = new Vector3(-0.3f, 2f, -0.3f);
-    
     public override void Created()
     {
-        float[] maxValues = { 20, 50, 75, 100 };
-        int choosen = Random.Range(0, maxValues.Length);
+      float [] maxValues =
+      {
+        1000,
+        2000,
+        3000,
+        4000
+      };
 
-        max = maxValues[choosen];
-        reward = choosen + 1;
-        progress = 0;
+      int chosen = Random.Range(0, maxValues.Length);
+
+      max = maxValues[chosen];
+      reward = chosen + 1;
+      progress = 0;
     }
 
     public override string GetMissionDesc()
     {
-        return "Jump over " + ((int)max) + " barriers";
+      return "Pickup " + max + " fishbones";
     }
 
-    public override MissionType GetMissionType()
+    public override MissionsType GetMissionType()
     {
-        return MissionType.OBSTACLE_JUMP;
+      return MissionsType.PICKUP;
     }
 
-    public override void RunStart(TrackManager manager)
+    public override void RunStart (TracksManager manager)
     {
-        m_Previous = null;
-        m_Hits = new Collider[k_HitColliderCount];
+      _previousCoinAmount = 0;
     }
 
-    public override void Update(TrackManager manager)
+    public override void Update (TracksManager manager)
     {
-        if(manager.CharactersController.isJumping)
+      int coins = manager.CharactersController.coins - _previousCoinAmount;
+      progress += coins;
+
+      _previousCoinAmount = manager.CharactersController.coins;
+    }
+  }
+
+  public class BarrierJumpMissions : MissionsBase
+  {
+    ObtObstacles _mPrevious;
+    Collider [] _mHits;
+
+    private const int k_HitColliderCount = 8;
+    private readonly Vector3 _characterColliderSizeOffset = new Vector3(-0.3f, 2f, -0.3f);
+
+    public override void Created()
+    {
+      float [] maxValues =
+      {
+        20,
+        50,
+        75,
+        100
+      };
+
+      int chosen = Random.Range(0, maxValues.Length);
+
+      max = maxValues[chosen];
+      reward = chosen + 1;
+      progress = 0;
+    }
+
+    public override string GetMissionDesc()
+    {
+      return "Jump over " + ((int)max) + " barriers";
+    }
+
+    public override MissionsType GetMissionType()
+    {
+      return MissionsType.OBSTACL_JUMP;
+    }
+
+    public override void RunStart (TracksManager manager)
+    {
+      _mPrevious = null;
+      _mHits = new Collider[k_HitColliderCount];
+    }
+
+    public override void Update (TracksManager manager)
+    {
+      if (manager.CharactersController.isJumping)
+      {
+        Vector3 boxSize = manager.CharactersController.CharactersCollider.collider.size + _characterColliderSizeOffset;
+        Vector3 boxCenter = manager.CharactersController.transform.position - Vector3.up * (boxSize.y * 0.5f);
+
+        int count = Physics.OverlapBoxNonAlloc(boxCenter, boxSize * 0.5f, _mHits);
+
+        for (int i = 0; i < count; ++i)
         {
-            Vector3 boxSize = manager.CharactersController.CharactersCollider.collider.size + k_CharacterColliderSizeOffset;
-            Vector3 boxCenter = manager.CharactersController.transform.position - Vector3.up * boxSize.y * 0.5f;
+          ObtObstacles obs = _mHits[i].GetComponent<ObtObstacles>();
 
-            int count = Physics.OverlapBoxNonAlloc(boxCenter, boxSize * 0.5f, m_Hits);
-
-            for(int i = 0; i < count; ++i)
+          if (obs != null && obs is AllLanesObtObstacles)
+          {
+            if (obs != _mPrevious)
             {
-                Obstacle obs = m_Hits[i].GetComponent<Obstacle>();
-
-                if(obs != null && obs is AllLaneObstacle)
-                {
-                    if(obs != m_Previous)
-                    {
-                        progress += 1;
-                    }
-
-                    m_Previous = obs;
-                }
+              progress += 1;
             }
-        }
-    }
-}
 
-public class SlidingMission : MissionBase
-{
-    float m_PreviousWorldDist;
+            _mPrevious = obs;
+          }
+        }
+      }
+    }
+  }
+
+  public class SlidingMissions : MissionsBase
+  {
+    float _mPreviousWorldDist;
 
     public override void Created()
     {
-        float[] maxValues = { 20, 30, 75, 150};
-        int choosen = Random.Range(0, maxValues.Length);
+      float [] maxValues =
+      {
+        20,
+        30,
+        75,
+        150
+      };
 
-        reward = choosen + 1;
-        max = maxValues[choosen];
-        progress = 0;
+      int chosen = Random.Range(0, maxValues.Length);
+
+      reward = chosen + 1;
+      max = maxValues[chosen];
+      progress = 0;
     }
 
     public override string GetMissionDesc()
     {
-        return "Slide for " + ((int)max) + "m";
+      return "Slide for " + ((int)max) + "m";
     }
 
-    public override MissionType GetMissionType()
+    public override MissionsType GetMissionType()
     {
-        return MissionType.SLIDING;
+      return MissionsType.SLID;
     }
 
-    public override void RunStart(TrackManager manager)
+    public override void RunStart (TracksManager manager)
     {
-        m_PreviousWorldDist = manager.worldDistance;
+      _mPreviousWorldDist = manager.worldDistance;
     }
 
-    public override void Update(TrackManager manager)
+    public override void Update (TracksManager manager)
     {
-        if(manager.CharactersController.isSliding)
-        {
-            float dist = manager.worldDistance - m_PreviousWorldDist;
-            progress += dist;
-        }
+      if (manager.CharactersController.isSliding)
+      {
+        float dist = manager.worldDistance - _mPreviousWorldDist;
+        progress += dist;
+      }
 
-        m_PreviousWorldDist = manager.worldDistance;
+      _mPreviousWorldDist = manager.worldDistance;
     }
-}
+  }
 
-public class MultiplierMission : MissionBase
-{
-	public override bool HaveProgressBar()
-	{
-		return false;
-	}
+  public sealed class MultiplierMission : MissionsBase
+  {
 
-	public override void Created()
+    public override void Created()
     {
-        float[] maxValue = { 3, 5, 8, 10 };
-        int choosen = Random.Range(0, maxValue.Length);
+      float [] maxValue =
+      {
+        3,
+        5,
+        8,
+        10
+      };
 
-        max = maxValue[choosen];
-        reward = (choosen + 1);
+      int chosen = Random.Range(0, maxValue.Length);
 
-        progress = 0;
+      max = maxValue[chosen];
+      reward = (chosen + 1);
+
+      progress = 0;
     }
 
     public override string GetMissionDesc()
     {
-        return "Reach a x" + ((int)max) + " multiplier";
+      return "Reach a x" + ((int)max) + " multiplier";
     }
 
-    public override MissionType GetMissionType()
+    public override MissionsType GetMissionType()
     {
-        return MissionType.MULTIPLIER;
+      return MissionsType.MULTIPLIER;
     }
 
-    public override void RunStart(TrackManager manager)
+    public override void RunStart (TracksManager manager)
     {
-        progress = 0;
+      progress = 0;
     }
 
-    public override void Update(TrackManager manager)
+    public override void Update (TracksManager manager)
     {
-        if (manager.multiplier > progress)
-            progress = manager.multiplier;
+      if (manager.multiplier > progress)
+        progress = manager.multiplier;
     }
+  }
 }
