@@ -111,6 +111,11 @@ namespace Characters
       _mSlideStart = 0.0f;
       _mIsRunning = false;
     }
+    
+#if !UNITY_STANDALONE
+    protected Vector2 m_StartingTouch;
+    protected bool m_IsSwiping = false;
+#endif
 
     public void CheatInvincible (bool invincible)
     {

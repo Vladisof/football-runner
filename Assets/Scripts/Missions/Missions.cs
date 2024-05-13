@@ -126,7 +126,7 @@ namespace Missions
 
     public override string GetMissionDesc()
     {
-      return "Pickup " + max + " fishbones";
+      return "Pickup " + max + " Coins";
     }
 
     public override MissionsType GetMissionType()

@@ -163,6 +163,7 @@ PlayerSettings:
   applicationIdentifier:
     Android: com.CoideaAgency.FootballRunner
     Standalone: com.Coidea-Agency.Football-Runner
+    iPhone: com.Coidea-Agency.Football-Runner
   buildNumber:
     Standalone: 0
     VisionOS: 0
@@ -186,7 +187,7 @@ PlayerSettings:
   strictShaderVariantMatching: 0
   VertexChannelCompressionMask: 4054
   iPhoneSdkVersion: 988
-  iOSTargetOSVersionString: 12.0
+  iOSTargetOSVersionString: 16.0
   tvOSSdkVersion: 0
   tvOSRequireExtendedGameController: 0
   tvOSTargetOSVersionString: 12.0
